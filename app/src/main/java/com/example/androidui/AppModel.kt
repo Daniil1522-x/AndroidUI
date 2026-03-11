@@ -1,3 +1,4 @@
+// Домашнее задание по UI
 package com.example.androidui
 
 data class AppModel(
