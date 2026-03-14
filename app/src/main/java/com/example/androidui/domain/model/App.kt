@@ -1,6 +1,6 @@
-package com.example.androidui
+package com.example.androidui.domain.model
 
-data class AppModel(
+data class App(
     val id: Int,
     val name: String,
     val description: String,

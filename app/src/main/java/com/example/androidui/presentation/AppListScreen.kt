@@ -1,4 +1,4 @@
-package com.example.androidui
+package com.example.androidui.presentation
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -18,13 +18,14 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.androidui.domain.model.App
 import kotlinx.coroutines.launch
 
-val RuStoreBlue = Color(0xFF2787F5)
+private val RuStoreBlue = Color(0xFF2787F5)
 
 @Composable
 fun AppListScreen(
-    onAppClick: (AppModel) -> Unit,
+    onAppClick: (App) -> Unit,
     viewModel: AppListViewModel = viewModel()
 ) {
     val apps by viewModel.apps.collectAsState()
@@ -84,7 +85,7 @@ private fun AppListHeader(onLogoClick: () -> Unit) {
 }
 
 @Composable
-fun AppListItem(app: AppModel, onClick: () -> Unit) {
+fun AppListItem(app: App, onClick: () -> Unit) {
     Row(
         modifier = Modifier
             .fillMaxWidth()

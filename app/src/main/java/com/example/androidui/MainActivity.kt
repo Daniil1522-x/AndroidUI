@@ -11,6 +11,9 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.androidui.presentation.AppDetailsScreen
+import com.example.androidui.presentation.AppListScreen
+import com.example.androidui.presentation.AppListViewModel
 import com.example.androidui.ui.theme.AndroidUITheme
 
 class MainActivity : ComponentActivity() {
