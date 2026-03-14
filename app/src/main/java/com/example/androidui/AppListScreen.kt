@@ -8,7 +8,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -17,36 +17,69 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import kotlinx.coroutines.launch
 
 val RuStoreBlue = Color(0xFF2787F5)
 
 @Composable
-fun AppListScreen(onAppClick: (AppModel) -> Unit) {
-    Column(modifier = Modifier.fillMaxSize()) {
-        // Шапка
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .background(RuStoreBlue)
-                .padding(horizontal = 16.dp, vertical = 12.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Text(
-                text = "RuStore",
-                color = Color.White,
-                fontSize = 20.sp,
-                fontWeight = FontWeight.Bold,
-                modifier = Modifier.weight(1f)
-            )
-        }
+fun AppListScreen(
+    onAppClick: (AppModel) -> Unit,
+    viewModel: AppListViewModel = viewModel()
+) {
+    val apps by viewModel.apps.collectAsState()
+    val showSnackbar by viewModel.showSnackbar.collectAsState()
 
-        // Список
-        LazyColumn(modifier = Modifier.fillMaxSize()) {
-            items(appsList) { app ->
-                AppListItem(app = app, onClick = { onAppClick(app) })
-                HorizontalDivider(color = Color.LightGray, thickness = 0.5.dp)
+    val snackbarHostState = remember { SnackbarHostState() }
+    val scope = rememberCoroutineScope()
+
+    LaunchedEffect(showSnackbar) {
+        if (showSnackbar) {
+            scope.launch {
+                snackbarHostState.showSnackbar("Добро пожаловать в RuStore!")
+            }
+            viewModel.onSnackbarShown()
+        }
+    }
+
+    Scaffold(
+        snackbarHost = { SnackbarHost(snackbarHostState) }
+    ) { padding ->
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(padding)
+        ) {
+            AppListHeader(onLogoClick = { viewModel.onLogoClick() })
+
+            LazyColumn(modifier = Modifier.fillMaxSize()) {
+                items(apps) { app ->
+                    AppListItem(app = app, onClick = { onAppClick(app) })
+                    HorizontalDivider(color = Color.LightGray, thickness = 0.5.dp)
+                }
             }
         }
+    }
+}
+
+@Composable
+private fun AppListHeader(onLogoClick: () -> Unit) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(RuStoreBlue)
+            .padding(horizontal = 16.dp, vertical = 12.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Text(
+            text = "RuStore",
+            color = Color.White,
+            fontSize = 20.sp,
+            fontWeight = FontWeight.Bold,
+            modifier = Modifier
+                .weight(1f)
+                .clickable { onLogoClick() }
+        )
     }
 }
 
