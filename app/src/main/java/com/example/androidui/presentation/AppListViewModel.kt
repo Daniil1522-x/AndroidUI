@@ -1,15 +1,17 @@
 package com.example.androidui.presentation
 
 import androidx.lifecycle.ViewModel
-import com.example.androidui.data.repository.AppRepositoryImpl
 import com.example.androidui.domain.model.App
 import com.example.androidui.domain.repository.AppRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import javax.inject.Inject
 
-class AppListViewModel(
-    private val repository: AppRepository = AppRepositoryImpl()
+@HiltViewModel
+class AppListViewModel @Inject constructor(
+    private val repository: AppRepository
 ) : ViewModel() {
 
     private val _apps = MutableStateFlow<List<App>>(emptyList())

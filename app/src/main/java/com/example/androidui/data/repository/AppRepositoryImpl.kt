@@ -1,11 +1,14 @@
 package com.example.androidui.data.repository
 
 import com.example.androidui.data.dto.AppDto
-import com.example.androidui.data.mapper.toDomain
+import com.example.androidui.data.mapper.AppMapper
 import com.example.androidui.domain.model.App
 import com.example.androidui.domain.repository.AppRepository
+import javax.inject.Inject
 
-class AppRepositoryImpl : AppRepository {
+class AppRepositoryImpl @Inject constructor(
+    private val mapper: AppMapper
+) : AppRepository {
 
     private val appDtos: List<AppDto> = listOf(
         AppDto(1, "СберБанк Онлайн", "Больше чем банк", "Финансы", android.R.drawable.ic_menu_myplaces),
@@ -16,5 +19,5 @@ class AppRepositoryImpl : AppRepository {
         AppDto(6, "Яндекс — с Алисой", "Яндекс — поиск всегда под рукой", "Инструменты", android.R.drawable.ic_menu_agenda),
     )
 
-    override fun getApps(): List<App> = appDtos.map { it.toDomain() }
+    override fun getApps(): List<App> = appDtos.map { mapper.toDomain(it) }
 }

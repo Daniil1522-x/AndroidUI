@@ -2,11 +2,14 @@ package com.example.androidui.data.mapper
 
 import com.example.androidui.data.dto.AppDto
 import com.example.androidui.domain.model.App
+import javax.inject.Inject
 
-fun AppDto.toDomain(): App = App(
-    id = id,
-    name = name,
-    description = description,
-    category = category,
-    iconRes = iconRes
-)
+class AppMapper @Inject constructor() {
+    fun toDomain(dto: AppDto): App = App(
+        id = dto.id,
+        name = dto.name,
+        description = dto.description,
+        category = dto.category,
+        iconRes = dto.iconRes
+    )
+}

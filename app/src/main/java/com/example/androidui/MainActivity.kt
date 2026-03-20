@@ -15,7 +15,9 @@ import com.example.androidui.presentation.AppDetailsScreen
 import com.example.androidui.presentation.AppListScreen
 import com.example.androidui.presentation.AppListViewModel
 import com.example.androidui.ui.theme.AndroidUITheme
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
