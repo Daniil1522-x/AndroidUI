@@ -1,12 +1,14 @@
 package com.example.androidui.presentation
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.androidui.domain.model.App
 import com.example.androidui.domain.repository.AppRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -21,7 +23,13 @@ class AppListViewModel @Inject constructor(
     val showSnackbar: StateFlow<Boolean> = _showSnackbar.asStateFlow()
 
     init {
-        _apps.value = repository.getApps()
+        loadApps()
+    }
+
+    private fun loadApps() {
+        viewModelScope.launch {
+            _apps.value = repository.getApps()
+        }
     }
 
     fun onLogoClick() {

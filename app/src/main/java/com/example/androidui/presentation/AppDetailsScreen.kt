@@ -8,9 +8,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil.compose.AsyncImage
 import com.example.androidui.domain.model.App
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -36,6 +38,13 @@ fun AppDetailsScreen(app: App, onBackClick: () -> Unit) {
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Spacer(modifier = Modifier.height(24.dp))
+            AsyncImage(
+                model = app.iconUrl,
+                contentDescription = app.name,
+                contentScale = ContentScale.Crop,
+                modifier = Modifier.size(96.dp)
+            )
+            Spacer(modifier = Modifier.height(16.dp))
             Text(
                 text = app.name,
                 fontSize = 24.sp,

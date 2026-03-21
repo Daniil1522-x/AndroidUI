@@ -45,7 +45,7 @@ fun AppNavigation() {
             )
         }
         composable("app_details/{appId}") { backStackEntry ->
-            val appId = backStackEntry.arguments?.getString("appId")?.toIntOrNull()
+            val appId = backStackEntry.arguments?.getString("appId")
             val apps by viewModel.apps.collectAsState()
             val app = apps.find { it.id == appId }
             if (app != null) {
