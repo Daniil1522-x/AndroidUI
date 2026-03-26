@@ -22,14 +22,11 @@ class AppListViewModel @Inject constructor(
     private val _showSnackbar = MutableStateFlow(false)
     val showSnackbar: StateFlow<Boolean> = _showSnackbar.asStateFlow()
 
+    private val _error = MutableStateFlow<String?>(null)
+    val error: StateFlow<String?> = _error.asStateFlow()
+
     init {
         loadApps()
-    }
-
-    private fun loadApps() {
-        viewModelScope.launch {
-            _apps.value = repository.getApps()
-        }
     }
 
     fun onLogoClick() {
@@ -38,5 +35,17 @@ class AppListViewModel @Inject constructor(
 
     fun onSnackbarShown() {
         _showSnackbar.value = false
+    }
+
+    private fun loadApps() {
+        viewModelScope.launch {
+            _error.value = null
+
+            try {
+                _apps.value = repository.getApps()
+            } catch (e: Exception) {
+                _error.value = e.message ?: "Unknown error"
+            }
+        }
     }
 }
