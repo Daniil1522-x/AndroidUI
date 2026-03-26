@@ -1,4 +1,4 @@
-package com.example.androidui
+package com.example.androidui.presentation
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
@@ -7,13 +7,17 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil.compose.AsyncImage
+import com.example.androidui.domain.model.App
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AppDetailsScreen(app: AppModel, onBackClick: () -> Unit) {
+fun AppDetailsScreen(app: App, onBackClick: () -> Unit) {
     Scaffold(
         topBar = {
             TopAppBar(
@@ -34,6 +38,13 @@ fun AppDetailsScreen(app: AppModel, onBackClick: () -> Unit) {
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Spacer(modifier = Modifier.height(24.dp))
+            AsyncImage(
+                model = app.iconUrl,
+                contentDescription = app.name,
+                contentScale = ContentScale.Crop,
+                modifier = Modifier.size(96.dp)
+            )
+            Spacer(modifier = Modifier.height(16.dp))
             Text(
                 text = app.name,
                 fontSize = 24.sp,
@@ -43,7 +54,7 @@ fun AppDetailsScreen(app: AppModel, onBackClick: () -> Unit) {
             Text(
                 text = app.category,
                 fontSize = 14.sp,
-                color = androidx.compose.ui.graphics.Color.Gray
+                color = Color.Gray
             )
             Spacer(modifier = Modifier.height(16.dp))
             Text(
