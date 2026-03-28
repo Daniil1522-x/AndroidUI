@@ -10,6 +10,7 @@ class AppMapper @Inject constructor() {
         name = dto.name,
         description = dto.description,
         category = dto.category,
-        iconUrl = dto.iconUrl
+        iconUrl = dto.iconUrl,
+        isInWishlist = false
     )
 }

@@ -3,6 +3,7 @@ package com.example.androidui.di
 import android.content.Context
 import androidx.room.Room
 import com.example.androidui.data.local.AppDatabase
+import com.example.androidui.data.local.AppDatabaseMigrations
 import com.example.androidui.data.local.AppDetailsDao
 import com.example.androidui.data.network.AppApiService
 import com.example.androidui.data.network.RetrofitClient
@@ -37,7 +38,9 @@ abstract class AppModule {
                 context,
                 AppDatabase::class.java,
                 AppDatabase.DATABASE_NAME
-            ).build()
+            )
+                .addMigrations(AppDatabaseMigrations.MIGRATION_1_2)
+                .build()
 
         @Provides
         @Singleton

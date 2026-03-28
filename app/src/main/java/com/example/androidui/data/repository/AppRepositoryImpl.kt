@@ -9,6 +9,9 @@ import com.example.androidui.domain.repository.AppRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.withContext
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.filterNotNull
+import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 class AppRepositoryImpl @Inject constructor(
@@ -22,7 +25,13 @@ class AppRepositoryImpl @Inject constructor(
         return try {
             val catalog = api.getCatalog()
             withContext(Dispatchers.IO) {
-                dao.insertAllAppDetails(catalog.map { entityMapper.toEntity(it) })
+                val existingById = dao.getAllAppDetails().associateBy { it.id }
+                val entities = catalog.map { dto ->
+                    val base = entityMapper.toEntity(dto)
+                    val wish = existingById[dto.id]?.isInWishlist ?: false
+                    base.copy(isInWishlist = wish)
+                }
+                dao.insertAllAppDetails(entities)
             }
             catalog.map { mapper.toDomain(it) }
         } catch (e: Exception) {
@@ -32,6 +41,19 @@ class AppRepositoryImpl @Inject constructor(
             } else {
                 throw e
             }
+        }
+    }
+
+    override fun observeAppDetails(id: String): Flow<App> {
+        return dao.getAppDetails(id)
+            .filterNotNull()
+            .map { entity -> entityMapper.toDomain(entity) }
+    }
+
+    override suspend fun toggleWishlist(id: String) {
+        val current = dao.getAppDetails(id).first()
+        current?.let {
+            dao.updateWishlistStatus(id, !it.isInWishlist)
         }
     }
 
@@ -53,7 +75,7 @@ class AppRepositoryImpl @Inject constructor(
                 dao.insertAppDetails(entityToSave)
             }
 
-            mapper.toDomain(dto)
+            mapper.toDomain(dto).copy(isInWishlist = entityToSave.isInWishlist)
         }
     }
 }

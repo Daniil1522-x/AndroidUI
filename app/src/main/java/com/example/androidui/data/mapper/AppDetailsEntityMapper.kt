@@ -23,7 +23,8 @@ class AppDetailsEntityMapper @Inject constructor() {
             name = entity.name,
             description = entity.description,
             category = entity.category,
-            iconUrl = entity.iconUrl
+            iconUrl = entity.iconUrl,
+            isInWishlist = entity.isInWishlist
         )
     }
 }
